@@ -10,6 +10,12 @@ public class CryptoService {
     private static final String COINGECKO_API_URL =
             "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd&include_24hr_change=true";
 
+    private final RestTemplate restTemplate;
+
+    public CryptoService(RestTemplate restTemplate) {
+        this.restTemplate = restTemplate;
+    }
+
     // Método existente (mantido para compatibilidade)
     public double getBitcoinPrice() {
         Map<String, Object> data = getBitcoinPriceWithChange();
@@ -18,7 +24,6 @@ public class CryptoService {
 
     // Novo método para pegar preço + variação
     public Map<String, Object> getBitcoinPriceWithChange() {
-        RestTemplate restTemplate = new RestTemplate();
         String response = restTemplate.getForObject(COINGECKO_API_URL, String.class);
 
         // Extrai preço e variação do JSON

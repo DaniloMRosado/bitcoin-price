@@ -4,6 +4,8 @@ import br.com.example.bitcoinprice.service.CryptoService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+
+import java.util.Locale;
 import java.util.Map;
 
 @Controller
@@ -18,7 +20,7 @@ public class CryptoController {
     public String getBitcoinPrice(Model model) {
         Map<String, Object> priceData = cryptoService.getBitcoinPriceWithChange();
 
-        model.addAttribute("bitcoinPrice", String.format("$ %.2f", priceData.get("price")));
+        model.addAttribute("bitcoinPrice", String.format(Locale.US, "$ %.2f", priceData.get("price")));
         model.addAttribute("priceChange", priceData.get("change"));
         return "index";
     }
