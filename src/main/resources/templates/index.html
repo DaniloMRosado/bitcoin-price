@@ -2,33 +2,163 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Bitcoin Price Tracker</title>
+    <title>Bitcoin Price Live</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
+        :root {
+            --gradient-1: #6366f1;
+            --gradient-2: #8b5cf6;
+            --gradient-3: #d946ef;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--gradient-1), var(--gradient-2), var(--gradient-3));
+            font-family: 'Poppins', sans-serif;
+            min-height: 100vh;
+            color: white;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .crypto-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2rem;
+            margin: 1rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            max-width: 600px;
+            width: 90%;
+        }
+
+        .crypto-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .bitcoin-logo {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 1.5rem;
+            filter: drop-shadow(0 0 10px rgba(255, 193, 7, 0.4));
+        }
+
         .price-display {
             font-size: 3.5rem;
-            font-weight: bold;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            font-weight: 600;
+            letter-spacing: 2px;
+            margin: 1rem 0;
+            text-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            position: relative;
         }
-        .container {
-            height: 100vh;
-            display: flex;
+
+        .price-change {
+            font-size: 1.2rem;
+            padding: 0.5rem 1rem;
+            border-radius: 30px;
+            display: inline-block;
+        }
+
+        .positive {
+            background: rgba(16, 185, 129, 0.2);
+            color: #10b981;
+        }
+
+        .negative {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+        }
+
+        .refresh-button {
+            background: rgba(255, 255, 255, 0.15);
+            border: none;
+            padding: 12px 24px;
+            border-radius: 50px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 2rem;
+            display: inline-flex;
             align-items: center;
-            justify-content: center;
+            gap: 8px;
+        }
+
+        .refresh-button:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: scale(1.05);
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.03); }
+            100% { transform: scale(1); }
+        }
+
+        .price-update {
+            animation: pulse 0.5s ease-in-out;
+        }
+
+        @media (max-width: 768px) {
+            .price-display {
+                font-size: 2.5rem;
+            }
+
+            .bitcoin-logo {
+                width: 60px;
+                height: 60px;
+            }
         }
     </style>
-    <script>
-        setTimeout(function() {
-            window.location.reload();
-        }, 10000); // 10 segundos
-    </script>
 </head>
-<body class="bg-dark text-light">
-<div class="container">
-    <div class="text-center">
-        <h1>₿ Bitcoin Price</h1>
-        <div class="price-display mt-3" th:text="${bitcoinPrice}">$ Loading...</div>
+<body>
+<div class="d-flex flex-column align-items-center justify-content-center min-vh-100">
+    <div class="crypto-card text-center">
+        <!-- Logo Bitcoin -->
+        <svg class="bitcoin-logo" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 24C18.6274 24 24 18.6274 24 12C24 5.37258 18.6274 0 12 0C5.37258 0 0 5.37258 0 12C0 18.6274 5.37258 24 12 24Z" fill="#F7931A"/>
+            <path d="M17.3116 12.9999C17.6756 11.6279 16.7356 10.8439 15.2876 10.4759L15.7596 8.64794L14.5956 8.36794L14.1316 10.1279C13.8436 10.0679 13.5476 10.0119 13.2516 9.95994L13.7276 8.10794L12.5676 7.82794L12.0876 9.63594C11.8036 9.58794 11.5236 9.53994 11.2516 9.48394L11.2516 9.48194L9.44762 7.61194L8.48762 8.03594C8.48762 8.03594 9.18362 8.23994 9.16362 8.25994C10.0476 8.47994 10.1636 8.91994 10.1356 9.40794L9.35162 13.6919C9.39162 13.7079 9.44362 13.7279 9.49962 13.7479L8.92362 15.7279L10.0836 16.0079L10.5956 14.1559C10.8996 14.2119 11.1996 14.2679 11.4916 14.3279L10.9996 16.1559L12.1596 16.4359L12.6556 14.5799C14.3436 14.8759 15.7396 14.6919 16.1396 13.5719C16.4516 12.6919 16.1356 12.1719 15.4276 11.8599C16.0396 11.7119 16.4996 11.2639 16.6396 10.4719C16.8156 9.45594 16.0196 8.81994 14.6076 8.54794L15.0796 6.73194L13.9196 6.45194L13.4556 8.19994C13.2036 8.15194 12.9476 8.10794 12.6956 8.05994L13.1716 6.23194L12.0116 5.95194L11.5356 7.78794C11.2836 7.74394 11.0396 7.70394 10.8036 7.65594L10.8036 7.65194L8.89562 5.67194L7.93562 6.09594C7.93562 6.09594 8.65962 6.31994 8.63962 6.33994C9.58762 6.58794 9.72762 7.11994 9.46362 7.98794L7.69962 15.9999C7.51562 16.6679 7.17162 16.8839 6.44762 16.6919C6.04762 16.5919 5.69962 16.4119 5.25162 16.1679L4.49962 17.2319C5.14762 17.6399 5.91562 17.9199 6.73962 18.0799L6.19562 19.9119L7.35562 20.1919L7.88362 18.4079C8.17162 18.4519 8.45962 18.4919 8.74362 18.5359L7.83962 21.5999L9.00762 21.8799L9.94362 18.7599C13.8596 19.3399 16.4596 18.6119 17.2996 15.5559C17.7596 13.8679 17.3116 12.9999 17.3116 12.9999ZM14.8036 13.3959C14.4236 15.1079 10.7356 14.2119 9.73962 14.0039L10.3676 11.0399C11.3636 11.2479 15.2036 11.6519 14.8036 13.3959ZM15.1196 9.71194C14.7836 11.2559 11.6356 10.5279 10.8076 10.3479L11.3516 7.76394C12.1796 7.94394 15.5196 8.09994 15.1196 9.71194Z" fill="white"/>
+        </svg>
+
+        <h1 class="mb-4">Bitcoin Price</h1>
+
+        <div class="price-display"
+             th:text="${bitcoinPrice}"
+             th:classappend="${priceChange >= 0 ? 'text-success' : 'text-danger'}">
+            $ Loading...
+        </div>
+
+        <div th:if="${priceChange != null}" class="mt-3">
+                <span class="price-change"
+                      th:classappend="${priceChange >= 0 ? 'positive' : 'negative'}">
+                    <i th:class="${priceChange >= 0 ? 'fas fa-arrow-up' : 'fas fa-arrow-down'}"></i>
+                    <span th:text="${#numbers.formatDecimal(priceChange, 1, 2)} + '%'">0.00%</span>
+                </span>
+        </div>
+
+        <button class="refresh-button" onclick="window.location.reload()">
+            <i class="fas fa-sync-alt"></i>
+            Refresh Now
+        </button>
     </div>
 </div>
+
+<script>
+    // Atualização automática a cada 30 segundos
+    setTimeout(() => window.location.reload(), 30000);
+
+    // Efeito de animação ao atualizar
+    document.addEventListener('DOMContentLoaded', () => {
+        const priceDisplay = document.querySelector('.price-display');
+        priceDisplay.classList.add('price-update');
+
+        setTimeout(() => {
+            priceDisplay.classList.remove('price-update');
+        }, 500);
+    });
+</script>
 </body>
 </html>
