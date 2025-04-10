@@ -1,6 +1,6 @@
 # 💰 Bitcoin Price Live - Spring Boot + Thymeleaf
 
-[![CI/CD Status](https://github.com/seu-usuario/bitcoin-price-live/actions/workflows/ci.yml/badge.svg)](https://github.com/seu-usuario/bitcoin-price-live/actions/workflows/ci.yml)
+[![CI/CD Status](https://github.com/seu-usuario/bitcoin-price-live/actions/workflows/ci.yml/badge.svg)](https://github.com/DaniloMRosado/bitcoin-price/blob/main/.github/workflows/ci.yml)
 
 Um projeto web desenvolvido com **Spring Boot** e **Thymeleaf** que exibe, em tempo real, o **preço atual do Bitcoin** e sua **variação nas últimas 24h** usando a API pública do [CoinGecko](https://www.coingecko.com/).
 
