@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Bitcoin Price Tracker</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .price-display {
+            font-size: 3.5rem;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        .container {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+    <script>
+        setTimeout(function() {
+            window.location.reload();
+        }, 10000); // 10 segundos
+    </script>
+</head>
+<body class="bg-dark text-light">
+<div class="container">
+    <div class="text-center">
+        <h1>₿ Bitcoin Price</h1>
+        <div class="price-display mt-3" th:text="${bitcoinPrice}">$ Loading...</div>
+    </div>
+</div>
+</body>
+</html>
